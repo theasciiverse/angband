@@ -1,0 +1,46 @@
+# System packages (.deb, .rpm, .apk, Arch) for Angband, built by nfpm from
+# the same static Linux build as the av archive, after asciiverse/stage.sh.
+# The release workflow sets VERSION, RELEASE (our packaging release) and
+# ARCH (amd64 or arm64).
+#
+# No .desktop file on purpose: av is the one place titles are started from,
+# so Asciiverse packages never add menu entries (asciiverse/CLAUDE.md).
+#
+# The game reads its data from /usr/share/angband and keeps each player's
+# files in their own $XDG_DATA_HOME/angband; nothing is setgid and there is
+# no shared score file.
+name: angband
+arch: ${ARCH}
+platform: linux
+version: ${VERSION}
+release: ${RELEASE}
+section: games
+priority: optional
+maintainer: Asciiverse <packages@asciiverse.sh>
+vendor: Asciiverse
+homepage: https://github.com/theasciiverse/angband
+license: GPL-2.0-only
+description: |
+  Dungeon crawl to the depths of Angband to defeat Morgoth.
+  The classic roguelike: create a character, go down through a hundred
+  levels of dungeon, gather equipment and fight the monsters of Middle-earth
+  on the way to Morgoth, Lord of Darkness. Curses (terminal) build.
+  By the Angband Dev Team, packaged by Asciiverse.
+contents:
+  - src: stage/angband
+    dst: /usr/bin/angband
+    file_info: { mode: 0755 }
+  - src: stage/lib/gamedata
+    dst: /usr/share/angband/gamedata
+  - src: stage/lib/customize
+    dst: /usr/share/angband/customize
+  - src: stage/lib/help
+    dst: /usr/share/angband/help
+  - src: stage/lib/screens
+    dst: /usr/share/angband/screens
+  - src: stage/copying.rst
+    dst: /usr/share/doc/angband/copyright
+    file_info: { mode: 0644 }
+  - src: stage/GPL-2
+    dst: /usr/share/doc/angband/GPL-2
+    file_info: { mode: 0644 }

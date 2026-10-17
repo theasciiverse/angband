@@ -71,3 +71,7 @@ src/stats/db.dep
 src/tests/ran-already
 src/version.h
 build*/
+# Asciiverse build output
+/stage/
+/dist/
+/smoke.log
