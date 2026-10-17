@@ -47,7 +47,7 @@ none), copied from Debian's `/usr/share/common-licenses/GPL-2`.
   the build so the version shown is `4.2.6`, not a `git describe` of our
   commits.
 - `asciiverse/stage.sh`: puts the program, `lib/{gamedata,customize,help,screens}`
-  without Makefiles, `docs/copying.rst` and `GPL-2` in `stage/`, the av
+  without the build files (`Makefile`, `.deps`), `docs/copying.rst` and `GPL-2` in `stage/`, the av
   archive's contents. No tiles, fonts, sounds or icons are shipped.
 - `asciiverse/nfpm.yaml`: .deb, .rpm, .apk and Arch packages: `/usr/bin/angband`,
   `/usr/share/angband`, the licence in `/usr/share/doc/angband`. No
