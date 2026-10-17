@@ -41,6 +41,14 @@
 #include <langinfo.h>
 #endif
 
+#if defined(UNIX)
+#include <limits.h>
+#include <unistd.h>
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+#endif
+
 /**
  * Some machines have a "main()" function in their "main-xxx.c" file,
  * all the others use this file for their "main()" function.
@@ -132,6 +140,43 @@ static void quit_hook(const char *s)
  * to leave enough space for the path separator, directory, and
  * filenames.
  */
+#if defined(UNIX)
+/**
+ * Asciiverse: find a lib folder that sits beside the running program, as
+ * in an av install or an unpacked archive, and put its path, ending in a
+ * separator, in buf.  The program is found through /proc/self/exe on
+ * Linux and _NSGetExecutablePath() on macOS, so a symbolic link to it
+ * (av's ~/.local/bin link) still leads to the real folder.
+ */
+static bool lib_beside_program(char *buf, size_t len)
+{
+	char exe[PATH_MAX];
+	char real[PATH_MAX];
+	char probe[PATH_MAX + 32];
+	char *slash;
+
+#ifdef __APPLE__
+	uint32_t size = sizeof(exe);
+
+	if (_NSGetExecutablePath(exe, &size) != 0) return false;
+#else
+	ssize_t n = readlink("/proc/self/exe", exe, sizeof(exe) - 1);
+
+	if (n <= 0) return false;
+	exe[n] = '\0';
+#endif
+	if (!realpath(exe, real)) return false;
+	slash = strrchr(real, '/');
+	if (!slash) return false;
+	*slash = '\0';
+
+	strnfmt(probe, sizeof(probe), "%s/lib/gamedata", real);
+	if (!dir_exists(probe)) return false;
+	strnfmt(buf, len, "%s/lib/", real);
+	return true;
+}
+#endif
+
 static void init_stuff(void)
 {
 	char configpath[512];
@@ -142,6 +187,18 @@ static void init_stuff(void)
 	my_strcpy(configpath, DEFAULT_CONFIG_PATH, sizeof(configpath));
 	my_strcpy(libpath, DEFAULT_LIB_PATH, sizeof(libpath));
 	my_strcpy(datapath, DEFAULT_DATA_PATH, sizeof(datapath));
+
+#if defined(UNIX)
+	/*
+	 * Asciiverse: the game data (gamedata, customize, help, screens) is
+	 * read from the lib folder beside the program when there is one,
+	 * else from the configured place, /usr/share/angband for the system
+	 * packages.  Either way it is only read; the player's own files go
+	 * to the data folder (init_file_paths()).
+	 */
+	if (lib_beside_program(libpath, sizeof(libpath)))
+		my_strcpy(configpath, libpath, sizeof(configpath));
+#endif
 
 	/* Make sure they're terminated */
 	configpath[511] = '\0';
