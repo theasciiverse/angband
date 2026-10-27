@@ -69,3 +69,9 @@ none), copied from Debian's `/usr/share/common-licenses/GPL-2`.
   `.exe` through `GetModuleFileName()`, the player's folder under
   `%APPDATA%`), and has not been tried.
 - X11, SDL, SDL2, sound, tiles, the stats and test frontends.
+
+## Ours
+
+- **How to play it, at the top of README.md.** A short note on installing and
+  starting it with av, or from a release archive; the original text follows
+  unchanged.

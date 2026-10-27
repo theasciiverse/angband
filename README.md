@@ -1,3 +1,16 @@
+> **Play it with Asciiverse.** With [av](https://asciiverse.sh), the Asciiverse
+> client:
+>
+> ```
+> av install angband
+> av play angband
+> ```
+>
+> Or download the archive for your system from this repository's Releases,
+> unpack it and run `./angband` (`angband.exe` on Windows).
+>
+> The original README follows.
+
 # Angband 4.2.6
 
 <p align="center">
