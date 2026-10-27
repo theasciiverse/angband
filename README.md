@@ -7,7 +7,7 @@
 > ```
 >
 > Or download the archive for your system from this repository's Releases,
-> unpack it and run `./angband` (`angband.exe` on Windows).
+> unpack it and run `./angband`.
 >
 > The original README follows.
 
